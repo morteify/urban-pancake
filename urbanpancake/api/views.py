@@ -6,7 +6,7 @@ from .models import User
 from .serializers import UserSerializer
 
 
-class UserList(ApiView):
+class UserList(APIView):
     """
     List all users, or crate a new user
     """
@@ -24,7 +24,7 @@ class UserList(ApiView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserDetail(ApiView):
+class UserDetail(APIView):
     """
     Retrieve, update or delete a user
     """
