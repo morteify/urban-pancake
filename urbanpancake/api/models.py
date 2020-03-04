@@ -13,9 +13,6 @@ class User(models.Model):
 
 class Picture(models.Model):
     description = models.TextField()
-    publish_date = models.DateTimeField()
+    publish_date = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(
         'User', related_name='pictures', on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ['author']

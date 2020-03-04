@@ -9,6 +9,8 @@ class UserList(generics.ListCreateAPIView):
     """
     List all users, or crate a new user
     """
+    permission_classes = [
+        permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -17,27 +19,29 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     Retrieve, update or delete a user
     """
+    permission_classes = [
+        permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-class PictureList(generics.ListAPIView):
+class PictureList(generics.ListCreateAPIView):
     """
     List all pictures, or create a new picture
     """
-    permission_clsses = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     queryset = Picture.objects.all()
     serializer_class = PictureSerializer
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        userInstance = User.objects.get(username=self.request.user)
+        serializer.save(author=userInstance)
 
 
-class PictureDetail(generics.RetrieveAPIView):
+class PictureDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     Retrieve, update or delete a picture
     """
-    permission_clsses = [
-        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     queryset = Picture.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = PictureSerializer
