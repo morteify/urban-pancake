@@ -3,6 +3,9 @@ from .models import User, Picture
 from .serializers import UserSerializer, PictureSerializer
 from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+from rest_framework.decorators import api_view
 
 
 class UserList(generics.ListCreateAPIView):
@@ -43,5 +46,15 @@ class PictureDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     Retrieve, update or delete a picture
     """
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     queryset = Picture.objects.all()
     serializer_class = PictureSerializer
+
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('user-list', request=request, format=format),
+        'pictures': reverse('picture-list', request=request, format=format)
+    })
