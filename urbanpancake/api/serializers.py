@@ -3,8 +3,8 @@ from .models import User, Picture
 
 
 class UserSerializer(serializers.ModelSerializer):
-    pictures = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Picture.objects.all())
+    pictures = serializers.HyperlinkedIdentityField(
+        many=True, view_name='picture-detail', read_only=True)
 
     class Meta:
         model = User
