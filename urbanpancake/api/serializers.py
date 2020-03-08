@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import User, Picture
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     pictures = serializers.HyperlinkedIdentityField(
         many=True, view_name='picture-detail', read_only=True)
 
